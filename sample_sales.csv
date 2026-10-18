@@ -1,0 +1,13 @@
+Region,Product_Category,Sales_Amount,Units_Sold,Customer_Rating,Date
+North,Electronics,4500.50,15,4.8,2026-01-05
+South,Furniture,2300.00,8,4.2,2026-01-10
+East,Electronics,8900.00,22,4.9,2026-01-12
+West,Clothing,1200.75,45,3.9,2026-01-15
+North,Furniture,3100.20,10,4.5,2026-01-18
+South,Electronics,6700.00,18,4.7,2026-01-20
+East,Clothing,2400.00,60,4.1,2026-01-22
+West,Furniture,5400.00,14,4.6,2026-01-25
+North,Clothing,1800.00,40,4.3,2026-01-28
+South,Electronics,9200.00,25,4.9,2026-02-01
+East,Furniture,4100.00,11,4.4,2026-02-05
+West,Electronics,7300.50,19,4.8,2026-02-08

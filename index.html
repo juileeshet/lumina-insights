@@ -1,0 +1,2585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Lumina Insights — Executive Glassmorphism Data Analytics & AI Assistant"/>
+  <title>Lumina Insights — Executive Analytics</title>
+
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <!-- AOS – Animate on Scroll -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+  <!-- Bootstrap 5 (toast, modal animations) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    /* ====================================================
+       NEUTRAL LIGHT GLASSMORPHISM DESIGN SYSTEM
+       ==================================================== */
+    :root {
+      --bg-main: #FBFBFA;
+      
+      /* Glass surface tokens */
+      --glass-surface: rgba(255, 255, 255, 0.76);
+      --glass-surface-hover: rgba(255, 255, 255, 0.92);
+      --glass-subtle: rgba(243, 242, 236, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-border-subtle: rgba(229, 228, 220, 0.65);
+      
+      --text-main: #1C1917;
+      --text-muted: #57534E;
+      --text-light: #78716C;
+
+      --primary: #0F766E;
+      --primary-hover: #115E59;
+      --accent-sage: #14B8A6;
+      --accent-clay: #C2410C;
+      --accent-sand: #D97706;
+      --accent-slate: #475569;
+
+      --shadow-glass: 0 8px 32px 0 rgba(15, 118, 110, 0.05), 0 2px 8px 0 rgba(0, 0, 0, 0.03);
+      --shadow-glass-hover: 0 16px 40px 0 rgba(15, 118, 110, 0.09), 0 4px 12px 0 rgba(0, 0, 0, 0.04);
+      --shadow-sm: 0 2px 4px rgba(28, 25, 23, 0.03);
+      
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Animated Floating Orbs in Background */
+    .bg-orbs {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.45;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, rgba(20, 184, 166, 0.25) 0%, rgba(15, 118, 110, 0.05) 70%);
+      top: -100px; right: -50px;
+      animation-duration: 22s;
+    }
+
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(217, 119, 6, 0.15) 0%, rgba(194, 65, 12, 0.03) 70%);
+      bottom: -150px; left: -100px;
+      animation-duration: 26s;
+    }
+
+    .orb-3 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.18) 0%, rgba(20, 184, 166, 0.02) 70%);
+      top: 40%; left: 45%;
+      animation-duration: 20s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, 30px) scale(1.08); }
+      100% { transform: translate(-30px, -40px) scale(0.95); }
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Glass Navbar */
+    .header {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--glass-border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      transition: all 0.3s ease;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-sage));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .brand:hover .brand-icon {
+      transform: rotate(5deg) scale(1.06);
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+
+    .brand-title span {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* Glass Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: rgba(243, 242, 236, 0.7);
+      backdrop-filter: blur(12px);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+    }
+
+    .tab-btn {
+      border: none;
+      background: transparent;
+      padding: 9px 18px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #115E59);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #115E59, var(--primary));
+      box-shadow: 0 6px 18px rgba(15, 118, 110, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--glass-surface);
+      backdrop-filter: blur(10px);
+      color: var(--text-main);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: var(--glass-surface-hover);
+      border-color: rgba(15, 118, 110, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Views */
+    .view-content {
+      display: none;
+      padding: 2.25rem 0;
+      flex: 1;
+    }
+
+    .view-content.active {
+      display: block;
+      animation: glassFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes glassFadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      text-align: center;
+      max-width: 740px;
+      margin: 0 auto 2.25rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: rgba(20, 184, 166, 0.12);
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(20, 184, 166, 0.2);
+    }
+
+    .hero-banner h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+      color: var(--text-main);
+      letter-spacing: -0.6px;
+    }
+
+    .hero-banner p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Glass Cards & Containers */
+    .glass-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-glass);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-card:hover {
+      box-shadow: var(--shadow-glass-hover);
+      border-color: rgba(255, 255, 255, 0.95);
+    }
+
+    /* Ingestion Source Switcher */
+    .source-nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+      background: rgba(243, 242, 236, 0.7);
+      backdrop-filter: blur(12px);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+    }
+
+    .source-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .source-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .source-btn.active {
+      background: #FFFFFF;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .source-panel {
+      display: none;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .source-panel.active {
+      display: block;
+      animation: glassFadeIn 0.3s ease;
+    }
+
+    .upload-card {
+      background: var(--glass-surface);
+      backdrop-filter: blur(16px);
+      border: 2px dashed rgba(20, 184, 166, 0.4);
+      border-radius: var(--radius-lg);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-glass);
+      transition: all 0.3s ease;
+    }
+
+    .upload-card:hover, .upload-card.dragover {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.95);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-glass-hover);
+    }
+
+    .upload-icon {
+      width: 74px;
+      height: 74px;
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .upload-card:hover .upload-icon {
+      transform: scale(1.1);
+      background: rgba(20, 184, 166, 0.18);
+    }
+
+    .connector-card {
+      padding: 2.25rem 2rem;
+    }
+
+    .connector-input-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .connector-input-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .connector-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.92rem;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.2s ease;
+    }
+
+    .connector-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+    }
+
+    .connector-hint {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 6px;
+    }
+
+    /* Live Header Pulse */
+    .pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+      animation: pulseAnimation 2s infinite;
+      margin-right: 6px;
+    }
+
+    @keyframes pulseAnimation {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* Glass Filter Bar */
+    .filter-bar {
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 9px 12px 9px 38px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: rgba(255, 255, 255, 0.8);
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .filter-selectors {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .filter-counter {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--glass-subtle);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    /* KPI Grid & Glass Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.25rem;
+    }
+
+    .kpi-card {
+      padding: 1.35rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: var(--shadow-glass-hover);
+    }
+
+    .kpi-icon-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .kpi-card:hover .kpi-icon-badge {
+      transform: scale(1.1);
+    }
+
+    .kpi-icon-badge.teal { background: rgba(15, 118, 110, 0.12); color: var(--primary); }
+    .kpi-icon-badge.clay { background: rgba(194, 65, 12, 0.12); color: var(--accent-clay); }
+    .kpi-icon-badge.sand { background: rgba(217, 119, 6, 0.12); color: var(--accent-sand); }
+    .kpi-icon-badge.slate { background: rgba(71, 85, 105, 0.12); color: var(--accent-slate); }
+
+    .kpi-content { flex: 1; }
+
+    .kpi-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 0.35rem;
+    }
+
+    .kpi-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .kpi-sub {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 0.35rem;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Chart Studio Glass Panel */
+    .studio-panel {
+      padding: 1.65rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .studio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .studio-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) auto auto;
+      gap: 1rem;
+      align-items: flex-end;
+      background: rgba(243, 242, 236, 0.6);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .control-select {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .control-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+    }
+
+    .studio-chart-wrap {
+      min-height: 380px;
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      background: rgba(251, 251, 250, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Automated Charts Grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .chart-box {
+      padding: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .chart-box:hover {
+      transform: translateY(-3px);
+    }
+
+    .chart-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .chart-badge {
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--primary);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(20, 184, 166, 0.15);
+    }
+
+    /* Text & Domain Intelligence Section */
+    .intel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .intel-card {
+      padding: 1.35rem;
+    }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 0.75rem;
+    }
+
+    .tag-pill {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .tag-pill:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 10px rgba(15, 118, 110, 0.25);
+    }
+
+    .tag-count {
+      font-size: 0.72rem;
+      background: rgba(0,0,0,0.06);
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .tag-pill:hover .tag-count {
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+
+    /* Data Health Scorecard */
+    .health-card {
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .progress-bar-wrap {
+      width: 110px;
+      height: 8px;
+      background: var(--glass-subtle);
+      border-radius: 4px;
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1s ease-in-out;
+    }
+
+    .status-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge.teal { background: rgba(15, 118, 110, 0.12); color: var(--primary); }
+    .status-badge.sand { background: rgba(217, 119, 6, 0.12); color: var(--accent-sand); }
+    .status-badge.clay { background: rgba(194, 65, 12, 0.12); color: var(--accent-clay); }
+
+    /* Insights Grid */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .insight-card {
+      padding: 1.35rem;
+      border-left: 5px solid var(--primary);
+    }
+
+    .insight-card.clay { border-left-color: var(--accent-clay); }
+    .insight-card.sand { border-left-color: var(--accent-sand); }
+    .insight-card.slate { border-left-color: var(--accent-slate); }
+
+    .insight-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .insight-body {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Table Preview */
+    .table-box {
+      border-radius: var(--radius-md);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(243, 242, 236, 0.8);
+      color: var(--text-muted);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: top;
+      max-width: 320px;
+    }
+
+    tr:hover td { background: rgba(255, 255, 255, 0.8); }
+
+    .read-more-btn {
+      border: none;
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--primary);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 4px;
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .read-more-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(28, 25, 23, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.active { display: flex; animation: glassFadeIn 0.25s ease; }
+
+    .modal-box {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-md);
+      max-width: 620px;
+      width: 90%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--glass-border);
+    }
+
+    .modal-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 1.25rem;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      color: var(--text-main);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    /* Chat Layout */
+    .chat-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 1.5rem;
+      height: 620px;
+    }
+
+    .chat-sidebar {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .chat-main {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .chat-msg {
+      max-width: 80%;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+    }
+
+    .chat-msg.user {
+      align-self: flex-end;
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+    }
+
+    .chat-msg.ai {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      color: var(--text-main);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .chat-input-area {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.95rem;
+      background: rgba(255, 255, 255, 0.9);
+      transition: all 0.2s ease;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
+    }
+
+    footer {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem 0;
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      margin-top: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      .charts-grid { grid-template-columns: 1fr; }
+      .chat-layout { grid-template-columns: 1fr; height: auto; }
+      .studio-controls { grid-template-columns: 1fr; }
+      .intel-grid { grid-template-columns: 1fr; }
+      .source-nav { flex-wrap: wrap; }
+    }
+
+    /* ====================================================
+       ENHANCED GLASS & ANIMATION SYSTEM v2
+       ==================================================== */
+
+    /* ---- Ripple Effect on Buttons ---- */
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .ripple-wave {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transform: scale(0);
+      animation: rippleAnim 0.6s linear;
+      pointer-events: none;
+    }
+    @keyframes rippleAnim {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ---- Deep Glass Panel (Frosted with shimmer border) ---- */
+    .glass-deep {
+      background: rgba(255, 255, 255, 0.60);
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255,255,255,0.82);
+      border-radius: var(--radius-md);
+      box-shadow:
+        0 8px 32px rgba(15,118,110,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-deep::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -60%;
+      width: 40%;
+      height: 250%;
+      background: linear-gradient(120deg,
+        rgba(255,255,255,0) 30%,
+        rgba(255,255,255,0.35) 50%,
+        rgba(255,255,255,0) 70%);
+      transform: skewX(-15deg);
+      animation: glassSheen 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes glassSheen {
+      0%   { left: -60%; }
+      60%  { left: 130%; }
+      100% { left: 130%; }
+    }
+
+    /* ---- Card 3D Tilt (applied via JS) ---- */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      will-change: transform;
+    }
+    .tilt-card:hover {
+      box-shadow:
+        0 20px 50px rgba(15,118,110,0.12),
+        0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    /* ---- Shimmer Skeleton Loader ---- */
+    .skeleton {
+      background: linear-gradient(90deg,
+        rgba(243,242,236,0.8) 25%,
+        rgba(255,255,255,0.9) 50%,
+        rgba(243,242,236,0.8) 75%);
+      background-size: 200% 100%;
+      animation: shimmerAnim 1.5s ease-in-out infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes shimmerAnim {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .skeleton-kpi {
+      height: 90px;
+      margin-bottom: 0;
+    }
+    .skeleton-chart {
+      height: 300px;
+    }
+    .skeleton-row {
+      height: 18px;
+      margin-bottom: 10px;
+    }
+    .skeleton-row:last-child { width: 70%; }
+
+    /* ---- Floating Toast Notifications ---- */
+    #lumina-toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .lumina-toast {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-main);
+      min-width: 280px;
+      max-width: 360px;
+      pointer-events: all;
+      animation: toastSlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .lumina-toast.fade-out {
+      animation: toastSlideOut 0.35s ease forwards;
+    }
+    @keyframes toastSlideIn {
+      from { opacity: 0; transform: translateX(80px) scale(0.92); }
+      to   { opacity: 1; transform: translateX(0)   scale(1); }
+    }
+    @keyframes toastSlideOut {
+      to { opacity: 0; transform: translateX(60px); }
+    }
+    .lumina-toast .toast-icon {
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+    .lumina-toast.success .toast-icon { color: #10B981; }
+    .lumina-toast.info    .toast-icon { color: var(--primary); }
+    .lumina-toast.warn    .toast-icon { color: var(--accent-sand); }
+    .lumina-toast.error   .toast-icon { color: var(--accent-clay); }
+
+    /* ---- Typewriter cursor ---- */
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: var(--primary);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blinkCursor 0.9s step-end infinite;
+    }
+    @keyframes blinkCursor {
+      50% { opacity: 0; }
+    }
+
+    /* ---- Count-up number effect ---- */
+    .kpi-value[data-count] {
+      transition: color 0.3s ease;
+    }
+
+    /* ---- Cursor sparkle trail (canvas overlay) ---- */
+    #sparkle-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9000;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ---- Animated gradient border on active glass cards ---- */
+    .glass-card.animate-border {
+      position: relative;
+    }
+    .glass-card.animate-border::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: calc(var(--radius-md) + 1px);
+      background: linear-gradient(135deg,
+        rgba(20,184,166,0.5),
+        rgba(255,255,255,0.1),
+        rgba(15,118,110,0.4));
+      background-size: 200% 200%;
+      animation: gradBorderSpin 4s linear infinite;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .glass-card.animate-border:hover::after { opacity: 1; }
+    @keyframes gradBorderSpin {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ---- Entrance pop animation for KPI cards ---- */
+    @keyframes popIn {
+      0%   { opacity: 0; transform: scale(0.85) translateY(20px); }
+      70%  { transform: scale(1.03) translateY(-3px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .kpi-card.pop-in {
+      animation: popIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    /* ---- Neon glow on hover for primary btn ---- */
+    .btn-primary:hover {
+      box-shadow:
+        0 0 12px rgba(20,184,166,0.5),
+        0 0 28px rgba(15,118,110,0.25),
+        0 6px 18px rgba(15,118,110,0.35);
+    }
+
+    /* ---- Enhanced glass card hover lift ---- */
+    .glass-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 20px 48px rgba(15,118,110,0.1),
+        0 8px 16px rgba(0,0,0,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    /* ---- Insight card entrance ---- */
+    .insight-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .insight-card:hover {
+      transform: translateX(6px);
+      box-shadow:
+        -4px 0 0 0 var(--primary),
+        0 8px 24px rgba(15,118,110,0.08);
+    }
+    .insight-card.clay:hover {
+      box-shadow:
+        -4px 0 0 0 var(--accent-clay),
+        0 8px 24px rgba(194,65,12,0.08);
+    }
+
+    /* ---- Upload icon breathe animation ---- */
+    .upload-icon {
+      animation: breathe 3s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.08); }
+    }
+    .upload-card:hover .upload-icon {
+      animation: none;
+      transform: scale(1.15);
+    }
+
+    /* ---- Loading spinner overlay ---- */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(251,251,250,0.75);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 8000;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .loading-overlay.active { display: flex; }
+    .spinner-ring {
+      width: 56px;
+      height: 56px;
+      border: 4px solid rgba(20,184,166,0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spinRing 0.8s linear infinite;
+    }
+    @keyframes spinRing {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      animation: loadTextPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes loadTextPulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.45; }
+    }
+
+    /* ---- Progress bar animated fill ---- */
+    .progress-fill {
+      transition: width 1.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ---- Tag pill ripple active ---- */
+    .tag-pill:active {
+      transform: scale(0.94) translateY(0);
+    }
+
+    /* ---- Table row stagger animation ---- */
+    @keyframes rowSlideIn {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .data-row-anim {
+      animation: rowSlideIn 0.35s ease both;
+    }
+
+    /* ---- Section divider pulse line ---- */
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg,
+        rgba(20,184,166,0.4),
+        rgba(20,184,166,0));
+      border-radius: 1px;
+      margin-left: 12px;
+      animation: lineGrow 0.6s ease both;
+    }
+    @keyframes lineGrow {
+      from { transform: scaleX(0); transform-origin: left; }
+      to   { transform: scaleX(1); transform-origin: left; }
+    }
+
+    /* ---- Sticky header scroll shadow ---- */
+    .header.scrolled {
+      box-shadow:
+        0 4px 20px rgba(15,118,110,0.08),
+        0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    /* Override Bootstrap utilities to not conflict */
+    .btn { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+
+  <!-- Sparkle Cursor Canvas -->
+  <canvas id="sparkle-canvas"></canvas>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner-ring"></div>
+    <div class="loading-text" id="loadingText">Analysing your data...</div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="lumina-toast-container"></div>
+
+  <!-- Floating Ambient Orbs -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="header">
+    <div class="container nav-wrapper">
+      <a href="#" class="brand">
+        <div class="brand-icon"><i class="fas fa-chart-pie"></i></div>
+        <div class="brand-title">Lumina <span>Insights</span></div>
+      </a>
+
+      <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('uploadView', this)">
+          <i class="fas fa-upload"></i> Connect Data
+        </button>
+        <button class="tab-btn" onclick="switchTab('dashboardView', this)">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </button>
+        <button class="tab-btn" onclick="switchTab('chatView', this)">
+          <i class="fas fa-comments"></i> AI Chat
+        </button>
+        <button class="tab-btn" onclick="switchTab('reportsView', this)">
+          <i class="fas fa-file-export"></i> Reports
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <a href="/api/download/pdf" class="btn btn-secondary" title="Export PDF Report">
+          <i class="fas fa-file-pdf" style="color: var(--accent-clay);"></i> PDF
+        </a>
+        <button class="btn btn-secondary" onclick="clearSession()" title="Reset session">
+          <i class="fas fa-rotate"></i> Reset
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- TAB 1: CONNECT DATA VIEW -->
+  <main id="uploadView" class="view-content active">
+    <div class="container">
+      <div class="hero-banner">
+        <div class="hero-badge"><i class="fas fa-wand-magic-sparkles"></i> Autonomous Analytics Studio</div>
+        <h1>Illuminate your data with clean intelligence</h1>
+        <p>Ingest from local files, live Google Sheets, web URLs, or SQLite databases with zero setup.</p>
+      </div>
+
+      <!-- Segmented Ingestion Switcher -->
+      <div class="source-nav">
+        <button class="source-btn active" onclick="switchSourceTab('sourceFile', this)">
+          <i class="fas fa-file-arrow-up"></i> Local File
+        </button>
+        <button class="source-btn" onclick="switchSourceTab('sourceGsheet', this)">
+          <i class="fas fa-table"></i> Google Sheets
+        </button>
+        <button class="source-btn" onclick="switchSourceTab('sourceUrl', this)">
+          <i class="fas fa-globe"></i> Web URL
+        </button>
+        <button class="source-btn" onclick="switchSourceTab('sourceSqlite', this)">
+          <i class="fas fa-database"></i> SQLite DB
+        </button>
+      </div>
+
+      <!-- PANEL 1: LOCAL FILE UPLOAD -->
+      <div class="source-panel active" id="sourceFile">
+        <div class="upload-card" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; margin-bottom: 0.5rem;">Drag & Drop Dataset Here</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Supports CSV, XLSX, XLS up to 32MB</p>
+          <button class="btn btn-primary" type="button">Browse Computer</button>
+          <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display: none;" onchange="uploadFile(this.files[0])"/>
+        </div>
+      </div>
+
+      <!-- PANEL 2: GOOGLE SHEETS -->
+      <div class="source-panel" id="sourceGsheet">
+        <div class="glass-card connector-card">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem;">
+            <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(15, 118, 110, 0.12); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+              <i class="fas fa-table"></i>
+            </div>
+            <div>
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700;">Connect Google Spreadsheet</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Paste any link where "Anyone with the link can view" is enabled.</p>
+            </div>
+          </div>
+
+          <div class="connector-input-group">
+            <label class="connector-input-label">Spreadsheet URL</label>
+            <input type="url" id="gsheetUrlInput" class="connector-input" placeholder="https://docs.google.com/spreadsheets/d/.../edit#gid=0"/>
+            <div class="connector-hint">Works free without API keys or credentials.</div>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center;">
+            <button class="btn btn-secondary" style="font-size: 0.82rem;" onclick="loadSampleGsheet()">
+              <i class="fas fa-wand-magic-sparkles"></i> Try Sample Google Sheet
+            </button>
+            <button class="btn btn-primary" onclick="connectGoogleSheet()">
+              <i class="fas fa-bolt"></i> Connect & Analyze
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: REMOTE WEB URL -->
+      <div class="source-panel" id="sourceUrl">
+        <div class="glass-card connector-card">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem;">
+            <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(217, 119, 6, 0.12); color: var(--accent-sand); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+              <i class="fas fa-globe"></i>
+            </div>
+            <div>
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700;">Stream Public Web Dataset</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Fetch any online CSV or JSON file via direct URL.</p>
+            </div>
+          </div>
+
+          <div class="connector-input-group">
+            <label class="connector-input-label">Public Dataset URL (.csv / .json)</label>
+            <input type="url" id="webUrlInput" class="connector-input" placeholder="https://raw.githubusercontent.com/.../dataset.csv"/>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center;">
+            <button class="btn btn-secondary" style="font-size: 0.82rem;" onclick="loadSampleWebUrl()">
+              <i class="fas fa-wand-magic-sparkles"></i> Try Sample Public CSV
+            </button>
+            <button class="btn btn-primary" onclick="connectWebUrl()">
+              <i class="fas fa-cloud-arrow-down"></i> Stream & Analyze
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 4: SQLITE DATABASE -->
+      <div class="source-panel" id="sourceSqlite">
+        <div class="glass-card connector-card">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem;">
+            <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(71, 85, 105, 0.12); color: var(--accent-slate); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+              <i class="fas fa-database"></i>
+            </div>
+            <div>
+              <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700;">SQLite Database Connector</h3>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Upload a local .sqlite or .db file to inspect and analyze tables.</p>
+            </div>
+          </div>
+
+          <div class="connector-input-group">
+            <label class="connector-input-label">Select SQLite File</label>
+            <input type="file" id="sqliteFileInput" class="connector-input" accept=".sqlite,.db"/>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end;">
+            <button class="btn btn-primary" onclick="connectSqliteFile()">
+              <i class="fas fa-database"></i> Load Database
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="uploadStatus" style="text-align: center; margin-top: 1.5rem; display: none;">
+        <i class="fas fa-circle-notch fa-spin" style="color: var(--primary); font-size: 1.75rem;"></i>
+        <p style="margin-top: 0.75rem; color: var(--text-muted); font-weight: 500;" id="statusText">
+          Connecting data source & building executive dashboard...
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: DASHBOARD VIEW -->
+  <main id="dashboardView" class="view-content">
+    <div class="container">
+      <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h2 class="section-title" style="margin-bottom: 0.2rem;"><i class="fas fa-chart-line"></i> Executive Analytics Dashboard</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            <span class="pulse-dot"></span><span id="dashMeta">No dataset active</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Glass Filter Bar -->
+      <section class="glass-card filter-bar">
+        <div class="search-box">
+          <i class="fas fa-magnifying-glass search-icon"></i>
+          <input type="text" id="globalSearchInput" class="search-input" placeholder="Search keywords across records (e.g. transfer, urgent, name)..." oninput="debounceFilter()"/>
+        </div>
+
+        <div class="filter-selectors">
+          <select id="quickFilterCol" class="control-select" onchange="populateFilterValues()">
+            <option value="">Filter by column...</option>
+          </select>
+          <select id="quickFilterVal" class="control-select" style="display: none;" onchange="applyFilter()">
+            <option value="">Select value...</option>
+          </select>
+          <button class="btn btn-secondary" onclick="resetFilters()">
+            <i class="fas fa-filter-circle-xmark"></i> Clear
+          </button>
+          <span class="filter-counter" id="filterCounter">All records</span>
+        </div>
+      </section>
+
+      <!-- KPIS -->
+      <div class="kpi-grid" id="kpiContainer"></div>
+
+      <!-- INTERACTIVE CHART STUDIO -->
+      <section class="glass-card studio-panel">
+        <div class="studio-header">
+          <div>
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-wand-magic-sparkles" style="color: var(--primary);"></i> Interactive Chart Studio
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 2px;">
+              Generate whatever chart fits your analysis best (Pie / Donut, Bar, Histogram, Line, Box Plot).
+            </p>
+          </div>
+          <button class="btn btn-secondary" onclick="exportCurrentChartImage()" id="btnExportImage" style="display: none;">
+            <i class="fas fa-camera"></i> Save PNG
+          </button>
+        </div>
+
+        <div class="studio-controls">
+          <div class="control-group">
+            <label class="control-label">Chart Type</label>
+            <select id="studioChartType" class="control-select" onchange="updateStudioInputs()">
+              <option value="hbar">Horizontal Bar Chart (Top Categories)</option>
+              <option value="pie">Donut / Pie Chart (Proportions)</option>
+              <option value="bar">Vertical Bar Chart (Frequencies)</option>
+              <option value="hist">Histogram (Distribution / Word Count)</option>
+              <option value="line">Line Chart (Trend / Sequence)</option>
+              <option value="box">Box Plot (Outliers / Spread)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Select Column</label>
+            <select id="studioColX" class="control-select"></select>
+          </div>
+
+          <div class="control-group" id="groupYCol" style="display: none;">
+            <label class="control-label">Metric (Y-Axis)</label>
+            <select id="studioColY" class="control-select"></select>
+          </div>
+
+          <div class="control-group" id="groupAgg" style="display: none;">
+            <label class="control-label">Aggregation</label>
+            <select id="studioAgg" class="control-select">
+              <option value="count">Count of Records</option>
+              <option value="sum">Sum Total</option>
+              <option value="mean">Average</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" onclick="renderCustomChart()">
+            <i class="fas fa-chart-column"></i> Render Chart
+          </button>
+        </div>
+
+        <div class="studio-chart-wrap" id="studioChartWrap">
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Select your preferences above and click <strong>Render Chart</strong> to visualize!
+          </p>
+        </div>
+      </section>
+
+      <!-- AUTOMATED CHARTS -->
+      <h3 class="section-title"><i class="fas fa-chart-pie"></i> Automated Dataset Visualizations</h3>
+      <div class="charts-grid" id="chartsContainer"></div>
+
+      <!-- TEXT & DOMAIN INTELLIGENCE -->
+      <section class="intel-grid" id="intelSection" style="display: none;">
+        <div class="glass-card intel-card">
+          <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700;">
+            <i class="fas fa-tags" style="color: var(--primary);"></i> Top Recurring Keywords
+          </h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+            Click any keyword to instantly filter the dataset.
+          </p>
+          <div class="tag-cloud" id="keywordCloud"></div>
+        </div>
+
+        <div class="glass-card intel-card">
+          <h4 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700;">
+            <i class="fas fa-at" style="color: var(--accent-clay);"></i> Top Email Domains
+          </h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+            Identified domains extracted from records.
+          </p>
+          <div class="tag-cloud" id="domainCloud"></div>
+        </div>
+      </section>
+
+      <!-- DATA HEALTH SCORECARD -->
+      <section class="glass-card health-card">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.25rem;">
+          <i class="fas fa-heart-pulse" style="color: var(--primary);"></i> Column Data Health & Integrity Scorecard
+        </h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Completeness percentage and field quality analysis across all ingested columns.
+        </p>
+
+        <div class="table-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Column Name</th>
+                <th>Inferred Type</th>
+                <th>Completeness</th>
+                <th>Missing Values</th>
+                <th>Unique Count</th>
+                <th>Integrity Status</th>
+              </tr>
+            </thead>
+            <tbody id="healthTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- INSIGHTS -->
+      <h3 class="section-title"><i class="fas fa-lightbulb"></i> Automated Domain Insights</h3>
+      <div class="insights-grid" id="insightsContainer"></div>
+
+      <!-- PREVIEW TABLE -->
+      <h3 class="section-title" style="margin-top: 2.5rem;"><i class="fas fa-table"></i> Cleaned Dataset Sample</h3>
+      <div class="glass-card table-box" id="tableContainer"></div>
+    </div>
+  </main>
+
+  <!-- TAB 3: CHAT VIEW -->
+  <main id="chatView" class="view-content">
+    <div class="container">
+      <div class="chat-layout">
+        <aside class="glass-card chat-sidebar">
+          <h4 style="font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;"><i class="fas fa-sparkles"></i> Prompt Ideas</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-secondary" style="font-size: 0.85rem; justify-content: flex-start;" onclick="sendQuickQuery('Show top 5 entries')">
+              <i class="fas fa-list-ol"></i> Show top 5 entries
+            </button>
+            <button class="btn btn-secondary" style="font-size: 0.85rem; justify-content: flex-start;" onclick="sendQuickQuery('Show pie breakdown')">
+              <i class="fas fa-chart-pie"></i> Pie chart breakdown
+            </button>
+            <button class="btn btn-secondary" style="font-size: 0.85rem; justify-content: flex-start;" onclick="sendQuickQuery('Show distribution histogram')">
+              <i class="fas fa-chart-column"></i> Distribution histogram
+            </button>
+          </div>
+        </aside>
+
+        <div class="glass-card chat-main">
+          <div class="chat-messages" id="chatThread">
+            <div class="chat-msg ai">
+              👋 Ask anything about your dataset in natural language. Try asking: <em>"Show top 5"</em>, <em>"Show pie chart breakdown"</em>, or <em>"Show distribution histogram"</em>.
+            </div>
+          </div>
+
+          <form class="chat-input-area" onsubmit="handleChatSubmit(event)">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Ask a question about your data..." required autocomplete="off"/>
+            <button class="btn btn-primary" type="submit"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 4: REPORTS VIEW -->
+  <main id="reportsView" class="view-content">
+    <div class="container" style="max-width: 780px;">
+      <h2 class="section-title"><i class="fas fa-file-export"></i> Export Executive Reports</h2>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">Download cleaned datasets and presentation-ready summaries in Excel or PDF format.</p>
+
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <div class="glass-card" style="padding: 1.75rem; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">
+              <i class="fas fa-file-pdf" style="color: var(--accent-clay);"></i> Executive PDF Report
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Formatted summary including performance metrics, embedded visual charts, and data health audit.</p>
+          </div>
+          <a href="/api/download/pdf" class="btn btn-primary"><i class="fas fa-download"></i> Export PDF</a>
+        </div>
+
+        <div class="glass-card" style="padding: 1.75rem; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.25rem;">
+              <i class="fas fa-file-excel" style="color: var(--primary);"></i> Cleaned Excel Workbook
+            </h3>
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Multi-sheet workbook containing sanitized raw data records and statistical summaries.</p>
+          </div>
+          <a href="/api/download/excel" class="btn btn-primary"><i class="fas fa-download"></i> Export Excel</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL FOR FULL TEXT -->
+  <div class="modal-backdrop" id="textModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span id="modalTitle">Full Entry View</span>
+        <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="modalBodyText"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      &copy; 2026 Lumina Insights • Executive Glassmorphic Analytics Platform
+    </div>
+  </footer>
+
+  <script>
+    let activeColumns = [];
+    let filterDebounceTimer = null;
+    let currentTotalRows = 0;
+
+    function switchTab(viewId, btnEl) {
+      document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      btnEl.classList.add('active');
+
+      if (viewId === 'dashboardView') loadDashboard();
+    }
+
+    function switchSourceTab(panelId, btnEl) {
+      document.querySelectorAll('.source-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.source-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(panelId).classList.add('active');
+      btnEl.classList.add('active');
+    }
+
+    // ====================================================
+    // INGESTION CONNECTORS LOGIC
+    // ====================================================
+    function setStatus(show, text="Processing...") {
+      const el = document.getElementById('uploadStatus');
+      const textEl = document.getElementById('statusText');
+      el.style.display = show ? 'block' : 'none';
+      if (textEl) textEl.innerText = text;
+    }
+
+    function showLoader(text = "Analysing your data...") {
+      document.getElementById('loadingText').textContent = text;
+      document.getElementById('loadingOverlay').classList.add('active');
+    }
+    function hideLoader() {
+      document.getElementById('loadingOverlay').classList.remove('active');
+    }
+
+    async function uploadFile(file) {
+      if (!file) return;
+      setStatus(true, 'Uploading file and building executive dashboard...');
+      showLoader('Uploading & analysing your file...');
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        setStatus(false); hideLoader();
+
+        if (res.ok) {
+          luminaToast('Dataset loaded successfully!', 'success');
+          switchTab('dashboardView', document.querySelectorAll('.tab-btn')[1]);
+        } else {
+          luminaToast('Upload Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        setStatus(false); hideLoader();
+        luminaToast('Upload Failed: ' + err.message, 'error');
+      }
+    }
+
+    async function connectGoogleSheet() {
+      const url = document.getElementById('gsheetUrlInput').value.trim();
+      if (!url) { luminaToast('Please enter a Google Sheet link.', 'warn'); return; }
+      setStatus(true, 'Connecting Google Sheet...');
+      showLoader('Streaming Google Sheet records...');
+
+      try {
+        const res = await fetch('/api/connect/gsheet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+        setStatus(false); hideLoader();
+
+        if (res.ok) {
+          luminaToast('Google Sheet connected!', 'success');
+          switchTab('dashboardView', document.querySelectorAll('.tab-btn')[1]);
+        } else {
+          luminaToast('Google Sheets Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        setStatus(false); hideLoader();
+        luminaToast('Connection Failed: ' + err.message, 'error');
+      }
+    }
+
+    function loadSampleGsheet() {
+      document.getElementById('gsheetUrlInput').value = 'https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0';
+      connectGoogleSheet();
+    }
+
+    async function connectWebUrl() {
+      const url = document.getElementById('webUrlInput').value.trim();
+      if (!url) { luminaToast('Please enter a dataset URL.', 'warn'); return; }
+      setStatus(true, 'Fetching remote dataset...');
+      showLoader('Fetching remote dataset...');
+
+      try {
+        const res = await fetch('/api/connect/url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+        const data = await res.json();
+        setStatus(false); hideLoader();
+
+        if (res.ok) {
+          luminaToast('Remote dataset loaded!', 'success');
+          switchTab('dashboardView', document.querySelectorAll('.tab-btn')[1]);
+        } else {
+          luminaToast('Web URL Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        setStatus(false); hideLoader();
+        luminaToast('Fetch Failed: ' + err.message, 'error');
+      }
+    }
+
+    function loadSampleWebUrl() {
+      document.getElementById('webUrlInput').value = 'https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv';
+      connectWebUrl();
+    }
+
+    async function connectSqliteFile() {
+      const input = document.getElementById('sqliteFileInput');
+      if (!input.files || input.files.length === 0) {
+        luminaToast('Please select a .sqlite or .db file.', 'warn'); return;
+      }
+      setStatus(true, 'Reading SQLite database tables...');
+      showLoader('Reading SQLite database...');
+      const formData = new FormData();
+      formData.append('file', input.files[0]);
+
+      try {
+        const res = await fetch('/api/connect/sqlite', { method: 'POST', body: formData });
+        const data = await res.json();
+        setStatus(false); hideLoader();
+
+        if (res.ok) {
+          luminaToast('SQLite database connected!', 'success');
+          switchTab('dashboardView', document.querySelectorAll('.tab-btn')[1]);
+        } else {
+          luminaToast('SQLite Error: ' + data.error, 'error');
+        }
+      } catch (err) {
+        setStatus(false); hideLoader();
+        luminaToast('SQLite Connection Failed: ' + err.message, 'error');
+      }
+    }
+
+    // ====================================================
+    // DASHBOARD RENDERING & ANIMATED COUNTER
+    // ====================================================
+    async function loadDashboard() {
+      try {
+        const res = await fetch('/api/dashboard');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        activeColumns = data.columns || [];
+        currentTotalRows = data.rows || 0;
+        populateStudioDropdowns(activeColumns);
+        populateFilterColumns(activeColumns);
+
+        document.getElementById('dashMeta').innerText = `${data.filename} — ${data.rows.toLocaleString()} records × ${data.cols} fields`;
+        document.getElementById('filterCounter').innerText = `Showing all ${data.rows.toLocaleString()} records`;
+
+        renderKPIs(data.kpis);
+
+        // Render Automated 4-Chart Suite
+        const chartsContainer = document.getElementById('chartsContainer');
+        chartsContainer.innerHTML = (data.charts || []).map((c, i) => `
+          <div class="glass-card glass-deep chart-box tilt-card animate-border"
+               data-aos="fade-up" data-aos-delay="${i * 80}" data-aos-duration="600">
+            <div class="chart-box-header">
+              <strong style="font-family: 'Outfit', sans-serif; font-size: 0.95rem;">${c.title}</strong>
+              <span class="chart-badge">${c.badge || 'CHART'}</span>
+            </div>
+            <div id="${c.id}"></div>
+          </div>
+        `).join('');
+
+        (data.charts || []).forEach((c, i) => {
+          setTimeout(() => {
+            const figObj = JSON.parse(c.json);
+            Plotly.newPlot(c.id, figObj.data, figObj.layout, { responsive: true, displayModeBar: false });
+          }, i * 60);
+        });
+        AOS.refresh();
+
+        // Render Keywords & Domains
+        if ((data.keywords && data.keywords.length > 0) || (data.domains && data.domains.length > 0)) {
+          document.getElementById('intelSection').style.display = 'grid';
+          document.getElementById('keywordCloud').innerHTML = (data.keywords || []).map(k => `
+            <span class="tag-pill" onclick="searchByKeyword('${k.word}')">
+              ${k.word} <span class="tag-count">${k.count}</span>
+            </span>
+          `).join('');
+
+          document.getElementById('domainCloud').innerHTML = (data.domains || []).map(d => `
+            <span class="tag-pill" onclick="searchByKeyword('${d.domain}')">
+              ${d.domain} <span class="tag-count">${d.count}</span>
+            </span>
+          `).join('');
+        }
+
+        // Render Health Scorecard
+        const healthTbody = document.getElementById('healthTableBody');
+        healthTbody.innerHTML = (data.data_health || []).map(h => `
+          <tr>
+            <td><strong>${h.column}</strong></td>
+            <td>${h.type}</td>
+            <td>
+              <div class="progress-bar-wrap">
+                <div class="progress-fill" style="width: ${h.complete_pct}%; background: var(--${h.status_color === 'teal' ? 'primary' : (h.status_color === 'sand' ? 'accent-sand' : 'accent-clay')});"></div>
+              </div>
+              ${h.complete_pct}%
+            </td>
+            <td>${h.missing.toLocaleString()}</td>
+            <td>${h.unique.toLocaleString()}</td>
+            <td><span class="status-badge ${h.status_color}">${h.status}</span></td>
+          </tr>
+        `).join('');
+
+        // Render Insights with clean Markdown formatting
+        const insightsContainer = document.getElementById('insightsContainer');
+        insightsContainer.innerHTML = (data.insights || []).map(ins => `
+          <div class="glass-card insight-card ${ins.color || 'teal'}">
+            <div class="insight-header"><i class="${ins.icon || 'fas fa-lightbulb'}"></i> ${ins.title}</div>
+            <div class="insight-body">${formatMarkdown(ins.text)}</div>
+          </div>
+        `).join('');
+
+        // Render Table Preview
+        renderTablePreview(data.preview, data.columns);
+
+      } catch (err) {
+        console.error("Dashboard render error:", err);
+      }
+    }
+
+    function renderKPIs(kpis) {
+      const kpiContainer = document.getElementById('kpiContainer');
+      kpiContainer.innerHTML = (kpis || []).map((k, i) => `
+        <div class="glass-card glass-deep kpi-card tilt-card animate-border pop-in"
+             style="animation-delay: ${i * 0.1}s"
+             data-aos="zoom-in" data-aos-delay="${i * 100}">
+          <div class="kpi-icon-badge ${k.color || 'teal'}"><i class="${k.icon || 'fas fa-chart-bar'}"></i></div>
+          <div class="kpi-content">
+            <div class="kpi-title">${k.label}</div>
+            <div class="kpi-value" data-count="${k.raw_value || ''}">${k.value}</div>
+            <div class="kpi-sub">${k.sub}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Trigger count-up on numeric KPIs
+      kpiContainer.querySelectorAll('.kpi-value[data-count]').forEach(el => {
+        const rawVal = parseFloat(el.dataset.count);
+        if (!isNaN(rawVal) && rawVal > 0) {
+          animateCountUp(el, rawVal);
+        }
+      });
+
+      // Apply tilt to new cards
+      setTimeout(() => applyTiltToCards(), 50);
+    }
+
+
+    function renderTablePreview(preview, columns) {
+      const tableContainer = document.getElementById('tableContainer');
+      if (preview && preview.length > 0) {
+        const cols = columns || Object.keys(preview[0]);
+        tableContainer.innerHTML = `
+          <table>
+            <thead><tr>${cols.map(c => `<th>${c.replace('_',' ')}</th>`).join('')}</tr></thead>
+            <tbody>
+              ${preview.map(row => `
+                <tr>
+                  ${cols.map(c => {
+                    const cell = row[c];
+                    if (!cell) return `<td></td>`;
+                    if (cell.is_truncated) {
+                      const safeFullText = escapeHtml(cell.full_text);
+                      return `
+                        <td>
+                          ${escapeHtml(cell.short_text)}
+                          <div><button class="read-more-btn" onclick="openModal('${c.replace('_',' ')}', \`${safeFullText}\`)">View Full</button></div>
+                        </td>
+                      `;
+                    }
+                    return `<td>${escapeHtml(cell.short_text)}</td>`;
+                  }).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } else {
+        tableContainer.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted);">No records match your filter.</div>`;
+      }
+    }
+
+    // ====================================================
+    // FILTER & SEARCH LOGIC
+    // ====================================================
+    function populateFilterColumns(cols) {
+      const selectCol = document.getElementById('quickFilterCol');
+      selectCol.innerHTML = `<option value="">Filter by column...</option>` + cols.map(c => `<option value="${c}">${c.replace('_',' ')}</option>`).join('');
+    }
+
+    function debounceFilter() {
+      clearTimeout(filterDebounceTimer);
+      filterDebounceTimer = setTimeout(applyFilter, 250);
+    }
+
+    function searchByKeyword(word) {
+      document.getElementById('globalSearchInput').value = word;
+      applyFilter();
+    }
+
+    async function applyFilter() {
+      const search = document.getElementById('globalSearchInput').value.trim();
+      const col = document.getElementById('quickFilterCol').value;
+      const val = document.getElementById('quickFilterVal').value;
+
+      try {
+        const res = await fetch('/api/filter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ search: search, filter_col: col || null, filter_val: val || null })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          renderKPIs(data.kpis);
+          renderTablePreview(data.preview, activeColumns);
+          document.getElementById('filterCounter').innerText = `Matched ${data.matched_rows.toLocaleString()} of ${data.total_rows.toLocaleString()}`;
+        }
+      } catch (err) {
+        console.error("Filter error:", err);
+      }
+    }
+
+    function resetFilters() {
+      document.getElementById('globalSearchInput').value = '';
+      document.getElementById('quickFilterCol').value = '';
+      document.getElementById('quickFilterVal').value = '';
+      document.getElementById('quickFilterVal').style.display = 'none';
+      applyFilter();
+    }
+
+    // ====================================================
+    // CHART STUDIO LOGIC & EXPORT IMAGE
+    // ====================================================
+    function populateStudioDropdowns(cols) {
+      const selectX = document.getElementById('studioColX');
+      const selectY = document.getElementById('studioColY');
+
+      selectX.innerHTML = cols.map(c => `<option value="${c}">${c.replace('_',' ')}</option>`).join('');
+      selectY.innerHTML = `<option value="">(None / Count)</option>` + cols.map(c => `<option value="${c}">${c.replace('_',' ')}</option>`).join('');
+    }
+
+    function updateStudioInputs() {
+      const type = document.getElementById('studioChartType').value;
+      const groupY = document.getElementById('groupYCol');
+      const groupAgg = document.getElementById('groupAgg');
+
+      if (['bar', 'hbar', 'line'].includes(type)) {
+        groupY.style.display = 'flex';
+        groupAgg.style.display = 'flex';
+      } else {
+        groupY.style.display = 'none';
+        groupAgg.style.display = 'none';
+      }
+    }
+
+    async function renderCustomChart() {
+      const chartType = document.getElementById('studioChartType').value;
+      const colX = document.getElementById('studioColX').value;
+      const colY = document.getElementById('studioColY').value;
+      const agg = document.getElementById('studioAgg').value;
+
+      const wrap = document.getElementById('studioChartWrap');
+      wrap.innerHTML = `<i class="fas fa-circle-notch fa-spin" style="font-size: 1.5rem; color: var(--primary);"></i>`;
+
+      try {
+        const res = await fetch('/api/custom_chart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chart_type: chartType, x_col: colX, y_col: colY, agg: agg })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          wrap.innerHTML = `<div id="studioPlot" style="width: 100%;"></div>`;
+          const fig = JSON.parse(data.chart_json);
+          Plotly.newPlot('studioPlot', fig.data, fig.layout, { responsive: true, displayModeBar: true });
+          document.getElementById('btnExportImage').style.display = 'inline-flex';
+        } else {
+          wrap.innerHTML = `<p style="color: var(--accent-clay); font-weight: 600;"><i class="fas fa-triangle-exclamation"></i> ${data.error}</p>`;
+        }
+      } catch (err) {
+        wrap.innerHTML = `<p style="color: var(--accent-clay); font-weight: 600;">Error: ${err.message}</p>`;
+      }
+    }
+
+    function exportCurrentChartImage() {
+      const plotEl = document.getElementById('studioPlot');
+      if (plotEl) {
+        Plotly.downloadImage(plotEl, { format: 'png', width: 1000, height: 600, filename: 'lumina_chart_export' });
+      }
+    }
+
+    function openModal(title, fullText) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalBodyText').innerText = fullText;
+      document.getElementById('textModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('textModal').classList.remove('active');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function formatMarkdown(text) {
+      if (!text) return '';
+      return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`(.*?)`/g, '<code style="background:rgba(20, 184, 166, 0.1);padding:2px 6px;border-radius:4px;font-size:0.88em;color:var(--primary);">$1</code>');
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatInput');
+      const question = input.value.trim();
+      if (!question) return;
+
+      appendChatMessage(question, 'user');
+      input.value = '';
+
+      try {
+        const res = await fetch('/api/query', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question })
+        });
+        const data = await res.json();
+        
+        if (res.ok) {
+          appendChatMessage(data.answer, 'ai', data.chart_json);
+        } else {
+          appendChatMessage('⚠️ ' + data.error, 'ai');
+        }
+      } catch (err) {
+        appendChatMessage('Error connecting to query engine.', 'ai');
+      }
+    }
+
+    function sendQuickQuery(text) {
+      document.getElementById('chatInput').value = text;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function appendChatMessage(text, sender, chartJson=null) {
+      const thread = document.getElementById('chatThread');
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-msg ${sender}`;
+      msgDiv.innerHTML = sender === 'ai' ? formatMarkdown(text) : escapeHtml(text);
+
+      if (chartJson) {
+        const chartId = 'chat_chart_' + Date.now();
+        const chartWrapper = document.createElement('div');
+        chartWrapper.id = chartId;
+        chartWrapper.style.marginTop = '10px';
+        msgDiv.appendChild(chartWrapper);
+        setTimeout(() => {
+          const figObj = JSON.parse(chartJson);
+          Plotly.newPlot(chartId, figObj.data, figObj.layout, { responsive: true, displayModeBar: false });
+        }, 50);
+      }
+
+      thread.appendChild(msgDiv);
+      thread.scrollTop = thread.scrollHeight;
+    }
+
+    async function clearSession() {
+      await fetch('/api/clear', { method: 'POST' });
+      location.reload();
+    }
+
+    // ============================================================
+    //  LUMINA ANIMATION ENGINE v2
+    // ============================================================
+
+    // --- AOS Init ---
+    document.addEventListener('DOMContentLoaded', () => {
+      AOS.init({
+        duration: 600,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        once: true,
+        offset: 40
+      });
+    });
+
+    // --- Ripple Effect on every .btn click ---
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn, .tab-btn, .source-btn, .tag-pill');
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top  - size / 2;
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple-wave';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+
+    // --- 3D Tilt on .tilt-card ---
+    function applyTiltToCards() {
+      document.querySelectorAll('.tilt-card').forEach(card => {
+        if (card._tiltBound) return; // already attached
+        card._tiltBound = true;
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const cx = rect.left + rect.width  / 2;
+          const cy = rect.top  + rect.height / 2;
+          const dx = (e.clientX - cx) / (rect.width  / 2);
+          const dy = (e.clientY - cy) / (rect.height / 2);
+          card.style.transform = `perspective(900px) rotateY(${dx * 6}deg) rotateX(${-dy * 5}deg) translateZ(4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateZ(0)';
+        });
+      });
+    }
+
+    // Apply tilt to any static tilt-cards on page load
+    document.addEventListener('DOMContentLoaded', () => setTimeout(applyTiltToCards, 300));
+
+    // --- Toast Notification System ---
+    function luminaToast(message, type = 'info', duration = 3800) {
+      const icons = {
+        success: 'fa-circle-check',
+        info:    'fa-circle-info',
+        warn:    'fa-triangle-exclamation',
+        error:   'fa-circle-xmark'
+      };
+      const container = document.getElementById('lumina-toast-container');
+      const toast = document.createElement('div');
+      toast.className = `lumina-toast ${type}`;
+      toast.innerHTML = `
+        <i class="fas ${icons[type] || icons.info} toast-icon"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        toast.addEventListener('animationend', () => toast.remove(), { once: true });
+      }, duration);
+    }
+
+    // --- Count-Up Animator ---
+    function animateCountUp(el, target) {
+      const displayText = el.textContent;
+      // Only animate if pure numeric display
+      if (!/^\d/.test(displayText.replace(/[,.\s]/g, ''))) return;
+
+      const isFloat = target % 1 !== 0;
+      const decimals = isFloat ? (String(target).split('.')[1] || '').length : 0;
+      const start = performance.now();
+      const duration = 1200;
+
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        const current = target * ease;
+        const formatted = current.toLocaleString(undefined, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        });
+
+        // Preserve any prefix/suffix from original display text
+        const prefix = displayText.match(/^[^\d]*/)[0] || '';
+        const suffix = displayText.match(/[^\d,.\s]*$/)[0] || '';
+        el.textContent = prefix + formatted + suffix;
+
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = displayText; // restore original formatted value
+      }
+      requestAnimationFrame(step);
+    }
+
+    // --- Sparkle Cursor Trail ---
+    (function initSparkle() {
+      const canvas = document.getElementById('sparkle-canvas');
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = window.innerWidth;
+      let H = canvas.height = window.innerHeight;
+      window.addEventListener('resize', () => {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+      const COLORS = ['#14B8A6', '#0F766E', '#D97706', '#10B981', '#60A5FA'];
+
+      window.addEventListener('mousemove', (e) => {
+        // Only spawn 1 particle every 3 moves to keep it subtle
+        if (Math.random() > 0.35) return;
+        particles.push({
+          x: e.clientX,
+          y: e.clientY,
+          r: Math.random() * 4 + 2,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          vx: (Math.random() - 0.5) * 1.8,
+          vy: (Math.random() - 0.5) * 1.8 - 1.2,
+          alpha: 0.85,
+          decay: Math.random() * 0.018 + 0.012
+        });
+      });
+
+      function loop() {
+        ctx.clearRect(0, 0, W, H);
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.04; // gravity
+          p.alpha -= p.decay;
+          if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+          ctx.globalAlpha = p.alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+
+    // --- Typewriter Effect on Hero h1 ---
+    function runTypewriter(selector, texts, speed = 55, pause = 2200) {
+      const el = document.querySelector(selector);
+      if (!el) return;
+      const cursor = document.createElement('span');
+      cursor.className = 'typewriter-cursor';
+      el.appendChild(cursor);
+
+      let textIdx = 0, charIdx = 0, deleting = false;
+
+      function type() {
+        const current = texts[textIdx];
+        if (!deleting) {
+          el.firstChild.textContent = current.slice(0, ++charIdx);
+          if (charIdx === current.length) {
+            deleting = true;
+            setTimeout(type, pause);
+            return;
+          }
+        } else {
+          el.firstChild.textContent = current.slice(0, --charIdx);
+          if (charIdx === 0) {
+            deleting = false;
+            textIdx = (textIdx + 1) % texts.length;
+          }
+        }
+        setTimeout(type, deleting ? speed / 2 : speed);
+      }
+
+      // Wrap existing text
+      const originalText = el.textContent;
+      el.innerHTML = '';
+      const textNode = document.createTextNode('');
+      el.appendChild(textNode);
+      el.appendChild(cursor);
+      charIdx = originalText.length;
+      el.firstChild.textContent = originalText;
+      // Start cycling subtitles after 3s
+      setTimeout(() => {
+        deleting = true;
+        type();
+      }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      runTypewriter('.hero-banner h1', [
+        'Turn Raw Data Into Executive Insights',
+        'Visualize Any Dataset Instantly',
+        'Powered by AI Analytics',
+        'No-Code Business Intelligence'
+      ]);
+    });
+
+    // --- Sticky Header Shadow on Scroll ---
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.header');
+      if (header) header.classList.toggle('scrolled', window.scrollY > 8);
+    }, { passive: true });
+
+    // --- Table Row Entrance Animations ---
+    const _origRenderTablePreview = typeof renderTablePreview === 'function' ? renderTablePreview : null;
+    // We'll patch row render after: add class to each tr
+    function animateTableRows() {
+      document.querySelectorAll('tbody tr:not(.data-row-anim)').forEach((tr, i) => {
+        tr.classList.add('data-row-anim');
+        tr.style.animationDelay = `${i * 0.03}s`;
+      });
+    }
+    // Observe the tableContainer for DOM changes
+    const tableObserver = new MutationObserver(() => animateTableRows());
+    document.addEventListener('DOMContentLoaded', () => {
+      const tc = document.getElementById('tableContainer');
+      if (tc) tableObserver.observe(tc, { childList: true, subtree: true });
+    });
+
+    // --- Insight cards get AOS fade-left on render ---
+    const _insightContainerObserver = new MutationObserver((mutations) => {
+      mutations.forEach(m => {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1 && node.classList.contains('insight-card')) {
+            node.setAttribute('data-aos', 'fade-left');
+            node.setAttribute('data-aos-duration', '500');
+          }
+        });
+      });
+      AOS.refresh();
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const ic = document.getElementById('insightsContainer');
+      if (ic) _insightContainerObserver.observe(ic, { childList: true });
+    });
+
+    // --- Show welcome toast on first load ---
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => luminaToast('Welcome to Lumina Insights \u2014 upload a dataset to begin!', 'info', 5000), 800);
+    });
+
+  </script>
+</body>
+</html>
